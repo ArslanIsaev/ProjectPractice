@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Telegram-бот</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Документация Telegram-бота</h1>
+  <nav>
+    <a href="index.html">Главная</a>
+    <a href="about.html">О проекте</a>
+    <a href="team.html">Участники</a>
+    <a href="journal.html">Журнал</a>
+    <a href="resources.html">Ресурсы</a>
+    <a href="bot.html">Telegram-бот</a>
+  </nav>
+</header>
+<main>
+  <section>
+    <h2>Управление аппаратом через Telegram</h2>
+    
+    <article>
+      <h3>Основные команды</h3>
+      <div class="command-list">
+        <div class="command-card">
+          <strong>/start</strong>
+          <p>Инициализация бота и вывод главного меню</p>
+        </div>
+        <div class="command-card">
+          <strong>/wash</strong>
+          <p>Запуск цикла мойки ковриков</p>
+        </div>
+        <div class="command-card">
+          <strong>/status</strong>
+          <p>Текущее состояние аппарата</p>
+        </div>
+      </div>
+    </article>
+
+    <article>
+      <h3>Архитектура системы</h3>
+      <img src="media/bot_arch.png" alt="Схема работы бота" class="scheme-img">
+      <p class="img-caption">Взаимодействие между компонентами системы</p>
+    </article>
+
+    <article>
+      <h3>Пример кода</h3>
+      <pre><code class="python">
+from telegram.ext import Updater, CommandHandler
+import RPi.GPIO as GPIO
+
+TOKEN = "YOUR_BOT_TOKEN"
+PUMP_PIN = 17
+
+def start(update, context):
+    update.message.reply_text("🚗 Бот для мойки ковриков активирован!")
+
+def wash(update, context):
+    GPIO.output(PUMP_PIN, GPIO.HIGH)
+    update.message.reply_text("🔵 Начата мойка...")
+    
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(PUMP_PIN, GPIO.OUT)
+
+updater = Updater(TOKEN)
+updater.dispatcher.add_handler(CommandHandler('start', start))
+updater.dispatcher.add_handler(CommandHandler('wash', wash))
+updater.start_polling()
+      </code></pre>
+    </article>
+
+    <article>
+      <h3>Инструкция по подключению</h3>
+      <ol class="instruction-list">
+        <li>Сканируйте QR-код для перехода к боту</li>
+        <li>Авторизуйтесь через меню /start</li>
+        <li>Выберите нужный режим мойки</li>
+      </ol>
+      <img src="media/qr_bot.png" alt="QR-код бота" class="qr-code">
+    </article>
+  </section>
+</main>
+<footer>© 2025 Команда проекта</footer>
+</body>
+</html>
